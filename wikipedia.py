@@ -58,7 +58,6 @@ def get_revision_ids(title):
                 revisions = page_info['revisions']
 
                 for entry in revisions[1:]:
-                    print(entry)
                     revision_list.append(entry['revid'])
                     ts_list.append(entry['timestamp'])
 

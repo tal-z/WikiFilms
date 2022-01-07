@@ -1,24 +1,21 @@
 <html>
   <head>
     <title>WikiFilms</title>
-        <script src=
-"https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
-    </script>
-    <link rel="stylesheet" href="
-https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
-    <script src="
-https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js">
-    </script>
-  </head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">  </head>
   <body>
-    <h1>WikiFilms {{ query }}</h1>
-    <img src="/wiki_feed/{{ query }}" style="max-height:75%; max-width:100%">
-
+  <div class="container-fluid">
+    <h1>WikiFilms</h1>
+    <h2>Now Playing: {{ query }}</h2>
+    <img src="/wiki_feed/{{ query }}" style="height:75%; max-width:100%">
     <form action="/" method="post" id="searchID">
-      <input type="text" name="wikiquery" class="searchClass"
-                    id="searchInputID" />
+      <input type="text" name="wikiquery" class="searchClass" id="searchInputID" />
       <button type="submit">Search</button>
     </form>
+  </div>
+
   </body>
     <script type="text/javascript">
         $(".searchClass").autocomplete({
