@@ -1,4 +1,5 @@
 import io
+import os
 
 from selenium import webdriver
 from selenium.webdriver.edge.service import Service
@@ -8,8 +9,15 @@ from chromedriver_py import binary_path
 from wikipedia import get_revision_ids
 from chunk_image import make_horizontal
 from PIL import Image
-options = Options()
-options.headless = True
+#options = Options()
+#options.headless = True
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+
 
 
 def screenshot(driver: webdriver.Chrome) -> bytes:
@@ -25,9 +33,11 @@ def screenshot(driver: webdriver.Chrome) -> bytes:
     return bytes.getvalue()
 
 
-def screenshots(title, options=options):
-    service_object = Service(binary_path)
-    driver = webdriver.Chrome(service=service_object, options=options)
+def screenshots(title):#, options=options):
+    #service_object = Service(binary_path)
+    #driver = webdriver.Chrome(service=service_object, options=options)
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+
     snapshot_url = f'https://en.wikipedia.org/w/index.php?title={title}'
     revision_ids, timestamps = get_revision_ids(title)
     for page_id in reversed(revision_ids):
