@@ -1,5 +1,6 @@
 from flask import Flask, Response, render_template, request
 from frames_generator import screenshots
+from wikipedia import get_revision_ids
 
 app = Flask(__name__)
 
@@ -14,7 +15,8 @@ def index():
 
 @app.route('/wiki_feed/<title>')
 def wiki_feed(title):
-    return Response(screenshots(title),
+    revision_ids, timestamps = get_revision_ids(title)
+    return Response(screenshots(title, revision_ids),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
