@@ -42,12 +42,13 @@ def screenshot(driver: webdriver.Chrome, timestamp: str, user: str) -> bytes:
     shot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
 
     im = make_horizontal(Image.open(io.BytesIO(shot)))
+    im.thumbnail((500,im.height))
 
     # get a drawing context
     d = ImageDraw.Draw(im)
 
     # draw multiline text
-    d.multiline_text((180, 10), f'Edited at: {timestamp}\nEdited by: {user}', fill=(0, 0, 0))
+    d.multiline_text((100, 10), f'Edited at: {timestamp}\nEdited by: {user}', fill=(0, 0, 0))
 
     bytes = io.BytesIO()
     im.save(bytes, format='PNG')
