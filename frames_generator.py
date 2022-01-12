@@ -7,10 +7,11 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from chromedriver_py import binary_path
 
-from wikipedia import get_revision_ids
+from wikipedia import get_entries
 from chunk_image import make_horizontal
-from PIL import Image
 from dotenv import load_dotenv
+from PIL import Image, ImageDraw, ImageFont
+
 
 load_dotenv()
 
@@ -34,27 +35,41 @@ else:
 original_size = driver.get_window_size()
 
 
-def screenshot(driver: webdriver.Chrome) -> bytes:
+def screenshot(driver: webdriver.Chrome, timestamp: str, user: str) -> bytes:
     required_width, required_height = driver.execute_script(
         'return [document.body.parentNode.scrollWidth, document.body.parentNode.scrollHeight]')
     driver.set_window_size(required_width, required_height)
     shot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
+
     im = make_horizontal(Image.open(io.BytesIO(shot)))
+
+    # get a drawing context
+    d = ImageDraw.Draw(im)
+
+    # draw multiline text
+    d.multiline_text((180, 10), f'Edited at: {timestamp}\nEdited by: {user}', fill=(0, 0, 0))
+
     bytes = io.BytesIO()
     im.save(bytes, format='PNG')
     driver.set_window_size(original_size['width'], original_size['height'])
     return bytes.getvalue()
 
 
-def screenshots(title, revision_ids):
-    snapshot_url = f'https://en.wikipedia.org/w/index.php?title={title}'
-    #revision_ids, timestamps = get_revision_ids(title)
-    for page_id in reversed(revision_ids):
-        page_id_param = f'&oldid={page_id}'
-        driver.get(snapshot_url + page_id_param)
-        driver.find_element(By.TAG_NAME, 'body')
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + screenshot(driver) + b'\r\n\r\n')
+def screenshots(title_or_get_title):#, entries):
 
+    #revision_ids, timestamps = get_revision_ids(title)
+    while True:
+        if type(title_or_get_title) != str:
+            title = title_or_get_title()
+        else:
+            title = title_or_get_title
+        snapshot_url = f'https://en.wikipedia.org/w/index.php?title={title}'
+
+        for entry in reversed(get_entries(title)):
+            page_id_param = f'&oldid={entry["revid"]}'
+            driver.get(snapshot_url + page_id_param)
+            driver.find_element(By.TAG_NAME, 'body')
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + screenshot(driver, entry['timestamp'], entry['user']) + b'\r\n\r\n')
 
 
