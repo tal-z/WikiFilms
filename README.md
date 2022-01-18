@@ -10,7 +10,7 @@ A streaming animation of all the edits to a given Wikipedia page.
 I thought it would be cool to see. I don't have a better reason...sorry.
 
 ### Where is it
-You can find a mostly-broken version deployed at [wikifilms.herokuapp.com](wikifilms.herokuapp.com)
+You can find a mostly-broken version deployed at https://wikifilms.herokuapp.com
 
 
 ### This was a good project. Here's why:
