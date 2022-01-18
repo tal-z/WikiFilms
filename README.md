@@ -2,7 +2,7 @@
 
 
 ### What is it?
-A streaming animation of all the edits to a given Wikipedia page, embedded in a Flask animation.
+A streaming animation of all the edits to a given Wikipedia page, embedded in a Flask application.
 
 
 
